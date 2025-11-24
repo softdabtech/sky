@@ -46,6 +46,13 @@ const SkyCodecPage = () => {
   const [currentStage, setCurrentStage] = useState(0);
   const [compressionResult, setCompressionResult] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    company: "",
+    message: ""
+  });
   const fileInputRef = useRef(null);
 
   const handleDragOver = (e) => {
