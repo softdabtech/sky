@@ -170,6 +170,34 @@ const SkyCodecPage = () => {
     }
   };
 
+  const handleContactClick = () => {
+    const subject = encodeURIComponent("I want to know more about SkyCodec");
+    const email = "info@softdab.tech";
+    window.location.href = `mailto:${email}?subject=${subject}`;
+  };
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    // TODO: Implement form submission logic
+    console.log("Form submitted:", formData);
+    toast.success("Message sent successfully!");
+    setIsDialogOpen(false);
+    setFormData({
+      name: "",
+      email: "",
+      company: "",
+      message: ""
+    });
+  };
+
   return (
     <div className="skycodec-container">
       {/* Header */}
