@@ -620,6 +620,32 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .skycodec-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .logo-section {
+    align-items: center;
+    width: 100%;
+  }
+
+  .header-actions {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .contact-btn,
+  .get-in-touch-btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+
   .skycodec-main {
     padding: 1.5rem;
     gap: 2.5rem;
