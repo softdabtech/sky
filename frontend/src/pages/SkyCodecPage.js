@@ -202,17 +202,116 @@ const SkyCodecPage = () => {
     <div className="skycodec-container">
       {/* Header */}
       <header className="skycodec-header">
-        <div className="logo-container">
-          <img 
-            src="https://customer-assets.emergentagent.com/job_skycodec-demo/artifacts/z2odrfab_logo%20%20%D0%B3%D0%BE%D1%80%D0%B8%D0%B7%20%D0%BC%D0%B0%D0%BB%D0%B5%D0%BD%D1%8C%D0%BA%D0%BE%D0%B5.png" 
-            alt="SkyCodec Logo" 
-            className="logo"
-          />
-        </div>
-        <div className="tagline-wrapper">
-          <Sparkles className="sparkle-icon" size={18} />
-          <p className="tagline">Next-Generation Data Compression Technology</p>
-          <Sparkles className="sparkle-icon" size={18} />
+        <div className="header-content">
+          <div className="logo-section">
+            <div className="logo-container">
+              <img 
+                src="https://customer-assets.emergentagent.com/job_skycodec-demo/artifacts/z2odrfab_logo%20%20%D0%B3%D0%BE%D1%80%D0%B8%D0%B7%20%D0%BC%D0%B0%D0%BB%D0%B5%D0%BD%D1%8C%D0%BA%D0%BE%D0%B5.png" 
+                alt="SkyCodec Logo" 
+                className="logo"
+              />
+            </div>
+            <div className="tagline-wrapper">
+              <Sparkles className="sparkle-icon" size={18} />
+              <p className="tagline">Next-Generation Data Compression Technology</p>
+              <Sparkles className="sparkle-icon" size={18} />
+            </div>
+          </div>
+          
+          <div className="header-actions">
+            <Button
+              onClick={handleContactClick}
+              className="contact-btn"
+              variant="outline"
+              data-testid="contact-button"
+            >
+              <Mail size={18} />
+              Contact
+            </Button>
+            
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  className="get-in-touch-btn"
+                  data-testid="get-in-touch-button"
+                >
+                  <Send size={18} />
+                  Get in Touch
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="contact-dialog">
+                <DialogHeader>
+                  <DialogTitle>Get in Touch</DialogTitle>
+                  <DialogDescription>
+                    Fill out the form below and we'll get back to you soon.
+                  </DialogDescription>
+                </DialogHeader>
+                <form onSubmit={handleFormSubmit} className="contact-form">
+                  <div className="form-field">
+                    <Label htmlFor="name">Name *</Label>
+                    <Input
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleFormChange}
+                      placeholder="Your name"
+                      required
+                      data-testid="contact-form-name"
+                    />
+                  </div>
+                  
+                  <div className="form-field">
+                    <Label htmlFor="email">Email *</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleFormChange}
+                      placeholder="your.email@example.com"
+                      required
+                      data-testid="contact-form-email"
+                    />
+                  </div>
+                  
+                  <div className="form-field">
+                    <Label htmlFor="company">Company</Label>
+                    <Input
+                      id="company"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleFormChange}
+                      placeholder="Your company name"
+                      data-testid="contact-form-company"
+                    />
+                  </div>
+                  
+                  <div className="form-field">
+                    <Label htmlFor="message">Message *</Label>
+                    <Textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleFormChange}
+                      placeholder="Tell us about your needs..."
+                      rows={4}
+                      required
+                      data-testid="contact-form-message"
+                    />
+                  </div>
+                  
+                  <Button
+                    type="submit"
+                    className="submit-btn"
+                    data-testid="contact-form-submit"
+                  >
+                    <Send size={18} />
+                    Send Message
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
       </header>
 
