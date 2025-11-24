@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import axios from "axios";
-import { Upload, CheckCircle2, Download } from "lucide-react";
+import { Upload, CheckCircle2, Download, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import "@/styles/SkyCodecPage.css";
@@ -165,12 +165,16 @@ const SkyCodecPage = () => {
       <header className="skycodec-header">
         <div className="logo-container">
           <img 
-            src="https://customer-assets.emergentagent.com/job_skycodec-demo/artifacts/ug1rw1et_%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA%20%D1%8D%D0%BA%D1%80%D0%B0%D0%BD%D0%B0%202025-11-24%20%D0%B2%2009.50.09.png" 
+            src="https://customer-assets.emergentagent.com/job_skycodec-demo/artifacts/z2odrfab_logo%20%20%D0%B3%D0%BE%D1%80%D0%B8%D0%B7%20%D0%BC%D0%B0%D0%BB%D0%B5%D0%BD%D1%8C%D0%BA%D0%BE%D0%B5.png" 
             alt="SkyCodec Logo" 
             className="logo"
           />
         </div>
-        <p className="tagline">Next-Generation Data Compression Technology</p>
+        <div className="tagline-wrapper">
+          <Sparkles className="sparkle-icon" size={18} />
+          <p className="tagline">Next-Generation Data Compression Technology</p>
+          <Sparkles className="sparkle-icon" size={18} />
+        </div>
       </header>
 
       {/* Main Content */}
@@ -198,19 +202,23 @@ const SkyCodecPage = () => {
             
             {!selectedFile && (
               <>
-                <Upload className="upload-icon" size={48} />
+                <div className="upload-icon-wrapper">
+                  <Upload className="upload-icon" size={56} />
+                </div>
                 <h3>Drop your file here</h3>
-                <p>or click to browse</p>
-                <span className="file-limit">Maximum file size: 10 MB</span>
+                <p className="upload-subtitle">or click to browse</p>
+                <div className="file-limit-badge">Maximum file size: 10 MB</div>
               </>
             )}
 
             {selectedFile && !compressionResult && (
               <>
                 <div className="file-info">
-                  <CheckCircle2 className="check-icon" size={48} />
+                  <div className="check-icon-wrapper">
+                    <CheckCircle2 className="check-icon" size={56} />
+                  </div>
                   <h3>{selectedFile.name}</h3>
-                  <p>{formatFileSize(selectedFile.size)}</p>
+                  <p className="file-size-label">{formatFileSize(selectedFile.size)}</p>
                 </div>
               </>
             )}
@@ -218,19 +226,23 @@ const SkyCodecPage = () => {
             {compressionResult && (
               <>
                 <div className="compression-result">
-                  <CheckCircle2 className="success-icon" size={56} />
-                  <h3>Compression Complete!</h3>
+                  <div className="success-icon-wrapper">
+                    <CheckCircle2 className="success-icon" size={64} />
+                  </div>
+                  <h3 className="success-title">Compression Complete!</h3>
                   <div className="result-stats">
                     <div className="stat">
-                      <span className="label">Original Size:</span>
+                      <span className="label">Original Size</span>
                       <span className="value">{formatFileSize(compressionResult.original_size)}</span>
                     </div>
+                    <div className="stat-divider"></div>
                     <div className="stat">
-                      <span className="label">Compressed Size:</span>
+                      <span className="label">Compressed Size</span>
                       <span className="value">{formatFileSize(compressionResult.compressed_size)}</span>
                     </div>
+                    <div className="stat-divider"></div>
                     <div className="stat highlight">
-                      <span className="label">Compression Ratio:</span>
+                      <span className="label">Compression Ratio</span>
                       <span className="value">{(compressionResult.compression_ratio * 100).toFixed(1)}%</span>
                     </div>
                   </div>
@@ -266,7 +278,7 @@ const SkyCodecPage = () => {
 
         {/* Workflow Stages */}
         <div className="workflow-section">
-          <h2 className="workflow-title">SkyCodec Workflow</h2>
+          <h2 className="workflow-title">How SkyCodec Works</h2>
           <div className="stages-container">
             {WORKFLOW_STAGES.map((stage, index) => (
               <div
