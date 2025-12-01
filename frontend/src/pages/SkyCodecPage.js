@@ -108,6 +108,7 @@ const SkyCodecPage = () => {
     try {
       const formData = new FormData();
       formData.append("file", file);
+      formData.append("filename", file.name);
 
       const response = await axios.post(`${API}/compress`, formData, {
         headers: {
