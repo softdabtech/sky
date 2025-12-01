@@ -139,7 +139,9 @@ const SkyCodecPage = () => {
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", `compressed_${compressionResult.original_name}`);
+      // Add .sky extension to downloaded file
+      const fileName = compressionResult.original_name.replace(/\.[^/.]+$/, "") + ".sky";
+      link.setAttribute("download", fileName);
       document.body.appendChild(link);
       link.click();
       link.parentNode.removeChild(link);
@@ -206,7 +208,7 @@ const SkyCodecPage = () => {
           <div className="logo-section">
             <div className="logo-container">
               <img 
-                src="https://customer-assets.emergentagent.com/job_skycodec-demo/artifacts/z2odrfab_logo%20%20%D0%B3%D0%BE%D1%80%D0%B8%D0%B7%20%D0%BC%D0%B0%D0%BB%D0%B5%D0%BD%D1%8C%D0%BA%D0%BE%D0%B5.png" 
+                src="https://customer-assets.emergentagent.com/job_skycodec-demo/artifacts/z2odrfab_logo%20%20%D0%B3%D0%BE%D1%80%D0%B8%D0%B7%20%D0%BC%D0%B0%D0%BB%D0%B5%D0%BD%D1%8C%D0%BA%D0%BE%D0%B5.png"
                 alt="SkyCodec Logo" 
                 className="logo"
               />
@@ -315,18 +317,60 @@ const SkyCodecPage = () => {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="skycodec-main">
-        {/* Upload Area */}
-        <div className="upload-section">
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1 className="hero-title">Sky Codec</h1>
+          <p className="hero-description">
+            A unique data compression and decompression algorithm that allows you to store, retrieve, 
+            and transfer any data file, without a loss, regardless of the file type or size, using only 
+            a fraction of your computing and storage resources.
+          </p>
+        </div>
+      </section>
+
+      {/* Main Content - Two Column Layout */}
+      <main className="skycodec-main-grid">
+        {/* Left Column: Workflow Stages */}
+        <div className="workflow-column">
+          <h2 className="workflow-title">How SkyCodec Works</h2>
+          <div className="stages-list">
+            {WORKFLOW_STAGES.map((stage) => (
+              <div
+                key={stage.id}
+                className={`stage-item ${
+                  currentStage >= stage.id ? "active" : ""
+                } ${currentStage === stage.id ? "current" : ""}`}
+                data-testid={`workflow-stage-${stage.id}`}
+              >
+                <div className="stage-indicator">
+                  <div className="stage-number">
+                    {currentStage > stage.id ? (
+                      <CheckCircle2 size={20} />
+                    ) : (
+                      stage.id
+                    )}
+                  </div>
+                </div>
+                <div className="stage-info">
+                  <h3 className="stage-title">{stage.title}</h3>
+                  <p className="stage-description">{stage.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Column: Upload Area */}
+        <div className="upload-column">
           <div
             className={`upload-zone ${
               isDragging ? "dragging" : ""
-            } ${isProcessing ? "processing" : ""}`}
+            } ${isProcessing ? "processing" : ""} ${compressionResult ? "completed" : ""}`}
             onDragOver={handleDragOver}
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
-            onClick={() => !isProcessing && fileInputRef.current?.click()}
+            onClick={() => !isProcessing && !compressionResult && fileInputRef.current?.click()}
             data-testid="upload-zone"
           >
             <input
@@ -334,7 +378,7 @@ const SkyCodecPage = () => {
               type="file"
               onChange={handleFileInputChange}
               style={{ display: "none" }}
-              disabled={isProcessing}
+              disabled={isProcessing || !!compressionResult}
               data-testid="file-input"
             />
             
@@ -343,7 +387,7 @@ const SkyCodecPage = () => {
                 <div className="upload-icon-wrapper">
                   <Upload className="upload-icon" size={56} />
                 </div>
-                <h3>Drop your file here</h3>
+                <h3 className="upload-title">Drop your file here</h3>
                 <p className="upload-subtitle">or click to browse</p>
                 <div className="file-limit-badge">Maximum file size: 10 MB</div>
               </>
@@ -355,8 +399,14 @@ const SkyCodecPage = () => {
                   <div className="check-icon-wrapper">
                     <CheckCircle2 className="check-icon" size={56} />
                   </div>
-                  <h3>{selectedFile.name}</h3>
+                  <h3 className="file-name">{selectedFile.name}</h3>
                   <p className="file-size-label">{formatFileSize(selectedFile.size)}</p>
+                  {isProcessing && (
+                    <div className="processing-indicator">
+                      <div className="spinner"></div>
+                      <p>Processing...</p>
+                    </div>
+                  )}
                 </div>
               </>
             )}
@@ -368,6 +418,7 @@ const SkyCodecPage = () => {
                     <CheckCircle2 className="success-icon" size={64} />
                   </div>
                   <h3 className="success-title">Compression Complete!</h3>
+                  
                   <div className="result-stats">
                     <div className="stat">
                       <span className="label">Original Size</span>
@@ -384,6 +435,21 @@ const SkyCodecPage = () => {
                       <span className="value">{(compressionResult.compression_ratio * 100).toFixed(1)}%</span>
                     </div>
                   </div>
+
+                  <div className="sky-file-info">
+                    <div className="sky-file-icon">
+                      <CheckCircle2 size={32} />
+                    </div>
+                    <div className="sky-file-details">
+                      <p className="sky-file-name">
+                        {compressionResult.original_name.replace(/\.[^/.]+$/, "")}.sky
+                      </p>
+                      <p className="sky-file-size">
+                        {formatFileSize(compressionResult.compressed_size)}
+                      </p>
+                    </div>
+                  </div>
+                  
                   <div className="action-buttons">
                     <Button 
                       onClick={(e) => {
@@ -391,10 +457,11 @@ const SkyCodecPage = () => {
                         handleDownload();
                       }}
                       className="download-btn"
+                      size="lg"
                       data-testid="download-button"
                     >
                       <Download size={20} />
-                      Download Compressed File
+                      Download .sky File
                     </Button>
                     <Button 
                       onClick={(e) => {
@@ -405,43 +472,12 @@ const SkyCodecPage = () => {
                       className="reset-btn"
                       data-testid="reset-button"
                     >
-                      Upload Another File
+                      Compress Another File
                     </Button>
                   </div>
                 </div>
               </>
             )}
-          </div>
-        </div>
-
-        {/* Workflow Stages */}
-        <div className="workflow-section">
-          <h2 className="workflow-title">How SkyCodec Works</h2>
-          <div className="stages-container">
-            {WORKFLOW_STAGES.map((stage, index) => (
-              <div
-                key={stage.id}
-                className={`stage ${
-                  currentStage >= stage.id ? "active" : ""
-                } ${currentStage === stage.id ? "current" : ""}`}
-                data-testid={`workflow-stage-${stage.id}`}
-              >
-                <div className="stage-number">
-                  {currentStage > stage.id ? (
-                    <CheckCircle2 size={24} />
-                  ) : (
-                    stage.id
-                  )}
-                </div>
-                <div className="stage-content">
-                  <h4>{stage.title}</h4>
-                  <p>{stage.description}</p>
-                </div>
-                {index < WORKFLOW_STAGES.length - 1 && (
-                  <div className="stage-connector" />
-                )}
-              </div>
-            ))}
           </div>
         </div>
       </main>
